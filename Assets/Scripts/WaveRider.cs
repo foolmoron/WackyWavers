@@ -13,7 +13,7 @@ public class WaveRider : MonoBehaviour {
 
     public GameObject RotateObj;
 
-    public const int ANGLE_SAMPLES = 12;
+    public const int ANGLE_SAMPLES = 4;
     QueueList<float> angles = new QueueList<float>(ANGLE_SAMPLES);
 
     public const int CORRECTNESS_SAMPLES = 30;
@@ -29,6 +29,10 @@ public class WaveRider : MonoBehaviour {
     public float MaxX = 5;
 
     public bool Jumping;
+    public float JumpY;
+    public float JumpVelocity;
+    public float JumpGravity = -10;
+    public AnimationCurve SpeedToJump;
 
     float Average(QueueList<float> list) {
         var sum = 0f;
@@ -50,17 +54,17 @@ public class WaveRider : MonoBehaviour {
     void FixedUpdate() {
         // do angle
         {
-            if (Input.GetKey(KeyCode.A)) {
+            if (Input.GetKey(KeyCode.LeftArrow)) {
                 Angle -= AngleSpeed * Time.deltaTime;
-            } else if (Input.GetKey(KeyCode.D)) {
+            } else if (Input.GetKey(KeyCode.RightArrow)) {
                 Angle += AngleSpeed * Time.deltaTime;
             }
         }
         // angles and positions
         var currentY = MusicWave.GetHeight(transform.position.x);
         {
-            var dX = 0.01f;
-            var dY = currentY - MusicWave.GetHeight(transform.position.x + dX);
+            var dX = 0.0001f;
+            var dY = MusicWave.GetSimpleHeight(transform.position.x + dX/2) - MusicWave.GetSimpleHeight(transform.position.x - dX/2);
             angles.Dequeue();
             angles.Enqueue(Mathf.Atan2(dY, dX) * Mathf.Rad2Deg);
         }
@@ -78,14 +82,38 @@ public class WaveRider : MonoBehaviour {
                 Speed = Mathf.Clamp(Speed, 0, 10);
             }
         }
+        // do jump
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow) && !Jumping) {
+                Jumping = true;
+                JumpY = currentY + 0.01f;
+                JumpVelocity = SpeedToJump.Evaluate(Speed);
+            }
+        }
+        // velocity/ gravity
+        {
+            if (Jumping) {
+                JumpVelocity -= JumpGravity * Time.deltaTime;
+                JumpY += JumpVelocity * Time.deltaTime;
+            }
+        }
+        // landing
+        {
+            if (JumpY <= currentY) {
+                Jumping = false;
+            }
+        }
         // position
         {
             var newPos = new Vector3(Mathf.Lerp(MinX, MaxX, Speed / 10), currentY, transform.position.z);
             transform.position = Vector3.MoveTowards(transform.position, newPos, HeightSpeed * Time.deltaTime);
+            if (Jumping) {
+                transform.position = transform.position.withY(JumpY);
+            }
         }
         // rotate
         {
-            RotateObj.transform.rotation = Quaternion.Euler(RotateObj.transform.rotation.eulerAngles.withZ(-Angle));
+            RotateObj.transform.rotation = Quaternion.Euler(RotateObj.transform.rotation.eulerAngles.withZ(Angle));
         }
     }
 }

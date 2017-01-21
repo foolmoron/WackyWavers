@@ -47,7 +47,12 @@ public class MusicWave : MonoBehaviour {
         var i = Mathf.FloorToInt((x - Offset) / Time.fixedDeltaTime);
         var remainder = x - i;
         var audioOffset = (i > 0 && i < Volumes.Count - 1 ? Mathf.Lerp(Volumes[i], Volumes[i + 1], remainder) : 0);
-        return BaseHeight + audioOffset + Mathf.Sin(audioReactive.BeatOutputAccum.x / 300 * x)*0.5f;
+        return GetSimpleHeight(x - Offset) + audioOffset;
         //return BaseHeight + (Mathf.Sin(3.5f * x) * 0.4f + Mathf.Sin(1.2f * x) * 0.2f + Mathf.Sin(0.8f * x) * 0.5f);
+    }
+
+    public float GetSimpleHeight(float x) {
+        x += Offset;
+        return BaseHeight + Mathf.Sin(audioReactive.BeatOutputAccum.x / 300 * x) * 0.5f;
     }
 }
