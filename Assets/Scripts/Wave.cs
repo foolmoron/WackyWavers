@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public class Wave : MonoBehaviour {
 
-    public WaveHeight WaveHeight;
+    public MusicWave MusicWave;
     [Range(0, 30)]
     public float Length = 10;
 
@@ -33,7 +33,7 @@ public class Wave : MonoBehaviour {
         // update heights
         {
             for (int i = 0; i < heights.Length; i++) {
-                heights[i] = WaveHeight.GetHeight(i * step);
+                heights[i] = MusicWave.GetHeight(i * step);
             }
         }
         // heights to verts
