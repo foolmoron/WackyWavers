@@ -16,14 +16,19 @@ public class WaveRider : MonoBehaviour {
     public const int ANGLE_SAMPLES = 12;
     QueueList<float> angles = new QueueList<float>(ANGLE_SAMPLES);
 
-    public const int CORRECTNESS_SAMPLES = 1*60;
+    public const int CORRECTNESS_SAMPLES = 30;
     QueueList<float> correctness = new QueueList<float>(CORRECTNESS_SAMPLES);
     
     public ParticleSystem SpeedParticles;
-    public float Speed;
-    public float MinX = 1;
-    public float MaxX = 4;
+    public float Speed = 2;
+    [Range(0, 10)]
+    public float Acceleration = 1;
+    [Range(0, 10)]
+    public float Deceleration = 3;
+    public float MinX = -0.5f;
+    public float MaxX = 5;
 
+    public bool Jumping;
 
     float Average(QueueList<float> list) {
         var sum = 0f;
@@ -68,8 +73,10 @@ public class WaveRider : MonoBehaviour {
 
             var speeding = averageCorrectness > 0.7f;
             SpeedParticles.enableEmission(speeding);
-            Speed += Time.deltaTime * (speeding ? 1 : -1);
-            Speed = Mathf.Clamp(Speed, 0, 10);
+            if (!Jumping) {
+                Speed += Time.deltaTime * (speeding ? Acceleration : -Deceleration);
+                Speed = Mathf.Clamp(Speed, 0, 10);
+            }
         }
         // position
         {
