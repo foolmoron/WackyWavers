@@ -11,11 +11,11 @@ public class Global : MonoBehaviour {
     public int CurrentLevel;
 
     void Awake() {
-        var global = FindObjectOfType<Global>();
-        if (global && global != this) {
-            DestroyImmediate(global.gameObject);
-        } else {
+        if (It == null) {
             It = this;
+            DontDestroyOnLoad(gameObject);
+        } else {
+            DestroyImmediate(gameObject);
         }
     }
 
