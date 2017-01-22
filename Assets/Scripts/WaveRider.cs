@@ -20,7 +20,8 @@ public class WaveRider : MonoBehaviour {
     QueueList<float> correctness = new QueueList<float>(CORRECTNESS_SAMPLES);
     
     public ParticleSystem SpeedParticles;
-    public float Speed = 2;
+    public float Speed = 5;
+    public float SpeedTarget = 5;
     [Range(0, 10)]
     public float Acceleration = 1;
     [Range(0, 10)]
@@ -34,8 +35,8 @@ public class WaveRider : MonoBehaviour {
     public float JumpGravity = 10;
     public AnimationCurve SpeedToJump;
     [Range(0, 10)]
-    public float AccelerationBonus = 3;
-    float currentBonus = 1;
+    public float AccelerationBonus = 2;
+
     bool init;
 
     float Average(QueueList<float> list) {
@@ -77,10 +78,6 @@ public class WaveRider : MonoBehaviour {
             angles.Enqueue(Mathf.Atan2(dY, dX) * Mathf.Rad2Deg);
         }
         var smoothedWaveAngle = Average(angles);
-        // bonus
-        {
-            currentBonus = Mathf.Lerp(currentBonus, 1, 0.05f);
-        }
         // correctness
         var currentCorrectness = 1 - (Mathf.Abs(Angle - smoothedWaveAngle) / 90);
         {
@@ -93,8 +90,8 @@ public class WaveRider : MonoBehaviour {
             var speeding = averageCorrectness > 0.7f;
             SpeedParticles.enableEmission(speeding && !Jumping);
             if (!Jumping) {
-                Speed += Time.deltaTime * (speeding ? Acceleration * currentBonus : -Deceleration);
-                Speed = Mathf.Clamp(Speed, 0, 10);
+                SpeedTarget += Time.deltaTime * (speeding ? Acceleration : -Deceleration);
+                SpeedTarget = Mathf.Clamp(SpeedTarget, 0, 10);
             }
         }
         // do jump
@@ -102,7 +99,7 @@ public class WaveRider : MonoBehaviour {
             if (Input.GetKey(KeyCode.UpArrow) && !Jumping) {
                 Jumping = true;
                 JumpY = currentY + 0.01f;
-                JumpVelocity = SpeedToJump.Evaluate(Speed);
+                JumpVelocity = SpeedToJump.Evaluate(SpeedTarget);
             }
         }
         // velocity/ gravity
@@ -117,8 +114,16 @@ public class WaveRider : MonoBehaviour {
             if (Jumping && JumpY <= currentY) {
                 Jumping = false;
                 // modify speed by landing
-                currentBonus = AccelerationBonus * currentCorrectness;
+                if (currentCorrectness > 0.7f) {
+                    SpeedTarget += currentCorrectness * AccelerationBonus;
+                } else {
+                    GetHurt();
+                }
             }
+        }
+        // speed
+        {
+            Speed = Mathf.Lerp(Speed, SpeedTarget, 0.1f);
         }
         // position
         {
@@ -132,5 +137,9 @@ public class WaveRider : MonoBehaviour {
         {
             RotateObj.transform.rotation = Quaternion.Euler(RotateObj.transform.rotation.eulerAngles.withZ(Angle));
         }
+    }
+
+    public void GetHurt() {
+        SpeedTarget -= 2f;
     }
 }
