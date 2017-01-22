@@ -7,7 +7,7 @@ public class MenuChars : MonoBehaviour {
     
     void Update() {
         for (int i = 0; i < Sprites.Length; i++) {
-            if (Global.It.CurrentCharacter == i) {
+            if (Global.TheCurrentCharacter == i) {
                 Sprites[i].color = Color.white;
             } else {
                 Sprites[i].color = new Color(0.3f, 0.3f, 0.3f);

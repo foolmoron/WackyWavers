@@ -15,7 +15,7 @@ public class MenuLevels : MonoBehaviour {
     
     void Update() {
         for (int i = 0; i < Levels.Length; i++) {
-            if (Global.It.CurrentLevel == i) {
+            if (Global.TheCurrentLevel == i) {
                 Dot.position = Levels[i].DotPos;
                 Name.sprite = Levels[i].NameSprite;
             }
