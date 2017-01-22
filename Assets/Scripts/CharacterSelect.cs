@@ -22,16 +22,20 @@ public class CharacterSelect : MonoBehaviour {
             chars[i].transform.localPosition = Vector3.zero;
             chars[i].transform.localEulerAngles = Vector3.zero;
         }
+
+        currentCharacter = Global.It.CurrentCharacter;
     }
 
     void Update() {
         // toggles
         {
+#if DEBUG
             if (Input.GetKeyDown(KeyCode.Q)) {
                 currentCharacter = (currentCharacter - 1 + chars.Length) % chars.Length;
             } else if (Input.GetKeyDown(KeyCode.W)) {
                 currentCharacter = (currentCharacter + 1 + chars.Length) % chars.Length;
             }
+#endif
         }
         for (int i = 0; i < chars.Length; i++) {
             if (i == currentCharacter) {
