@@ -6,6 +6,7 @@ public class ScrollingBackground : MonoBehaviour {
 
     public WaveRider Rider;
     public float BaseScrollSpeed = 1f;
+    public float Scale = 1f;
     public List<Transform> Items = new List<Transform>(50);
     public GameObject[] StuffPrefabs;
 
@@ -28,8 +29,8 @@ public class ScrollingBackground : MonoBehaviour {
                 var thing = StuffPrefabs.Random();
                 var newObj = Instantiate(thing);
                 newObj.transform.parent = transform;
-                newObj.transform.localPosition = new Vector3(30, 4*z + (Random.value - 0.5f), z);
-                newObj.transform.localScale = newObj.transform.localScale * Mathf.Lerp(2, 0.2f, z);
+                newObj.transform.localPosition = new Vector3(30, 0, 0);
+                newObj.transform.localScale = newObj.transform.localScale * Scale;
                 Items.Add(newObj.transform);
 
                 var parallax = newObj.GetComponent<VerticalParallax>();
@@ -42,7 +43,7 @@ public class ScrollingBackground : MonoBehaviour {
         {
             var scrollAmount = BaseScrollSpeed * Rider.Speed * Time.deltaTime;
             foreach (var item in Items) {
-                item.localPosition = item.localPosition.plusX(-scrollAmount * ((1 - item.localPosition.z) * (1 - item.localPosition.z) + 0.08f));
+                item.localPosition = item.localPosition.plusX(-scrollAmount);
             }
         }
         // delete items
