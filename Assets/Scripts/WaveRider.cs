@@ -75,7 +75,6 @@ public class WaveRider : MonoBehaviour {
         // bonus
         {
             currentBonus = Mathf.Lerp(currentBonus, 1, 0.05f);
-            Debug.Log(currentBonus);
         }
         // correctness
         var currentCorrectness = 1 - (Mathf.Abs(Angle - smoothedWaveAngle) / 90);
