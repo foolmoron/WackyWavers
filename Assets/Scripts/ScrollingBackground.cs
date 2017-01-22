@@ -30,7 +30,7 @@ public class ScrollingBackground : MonoBehaviour {
                 var newObj = Instantiate(thing);
                 newObj.transform.parent = transform;
                 newObj.transform.localPosition = new Vector3(30, 0, 0);
-                newObj.transform.localScale = newObj.transform.localScale * Scale;
+                newObj.transform.localScale = newObj.transform.localScale * Scale * Mathf.Lerp(0.9f, 1.1f, Random.value);
                 Items.Add(newObj.transform);
 
                 var parallax = newObj.GetComponent<VerticalParallax>();
@@ -41,7 +41,7 @@ public class ScrollingBackground : MonoBehaviour {
         }
         // scroll
         {
-            var scrollAmount = BaseScrollSpeed * Rider.Speed * Time.deltaTime;
+            var scrollAmount = BaseScrollSpeed * Mathf.Max(Rider.Speed, 0.1f) * Time.deltaTime;
             foreach (var item in Items) {
                 item.localPosition = item.localPosition.plusX(-scrollAmount);
             }
