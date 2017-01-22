@@ -7,6 +7,9 @@ public class Global : MonoBehaviour {
 
     public static Global It;
 
+    public static int TheCurrentCharacter;
+    public static int TheCurrentLevel;
+
     public int CurrentCharacter;
     public int CurrentLevel;
 
@@ -17,6 +20,11 @@ public class Global : MonoBehaviour {
         } else {
             DestroyImmediate(gameObject);
         }
+    }
+
+    void FixedUpdate() {
+        TheCurrentCharacter = CurrentCharacter;
+        TheCurrentLevel = CurrentLevel;
     }
 
     public void LoadScene(string scene) {

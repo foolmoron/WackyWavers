@@ -23,7 +23,7 @@ public class CharacterSelect : MonoBehaviour {
             chars[i].transform.localEulerAngles = Vector3.zero;
         }
 
-        currentCharacter = Global.It.CurrentCharacter;
+        currentCharacter = Global.TheCurrentCharacter;
     }
 
     void Update() {
