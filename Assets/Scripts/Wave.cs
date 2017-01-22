@@ -8,8 +8,10 @@ public class Wave : MonoBehaviour {
 
     public MusicWave MusicWave;
     public bool UseSimple;
-    [Range(0, 30)]
     public float Length = 10;
+
+    public Color Color = Color.white;
+    Material mat;
 
     public const int NUM_POINTS = 1000;
 
@@ -27,10 +29,20 @@ public class Wave : MonoBehaviour {
             };
             GetComponent<MeshFilter>().mesh = mesh;
         }
+        //
+        {
+            var renderer = GetComponent<Renderer>();
+            mat = new Material(renderer.material);
+            renderer.material = mat;
+        }
     }
 
     void Update() {
         var step = Length / heights.Length;
+        // color
+        {
+            mat.color = Color;
+        }
         // update heights
         {
             for (int i = 0; i < heights.Length; i++) {
