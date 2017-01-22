@@ -63,5 +63,6 @@ public class Wave : MonoBehaviour {
             }
             mesh.triangles = triangles;
         }
+        mesh.RecalculateBounds();
     }
 }

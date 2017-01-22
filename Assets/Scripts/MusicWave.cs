@@ -50,7 +50,6 @@ public class MusicWave : MonoBehaviour {
         {
             beatAverage = beatTimes.average();
             currentBeatTarget = Mathf.Clamp(Mathf.Lerp(currentBeatTarget, beatAverage, 0.03f), 0, 1);
-            Debug.Log(beatAverage + " - " + currentBeatTarget);
         }
         // get current play position as offset
         {
