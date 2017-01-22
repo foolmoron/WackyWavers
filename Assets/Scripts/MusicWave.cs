@@ -55,6 +55,12 @@ public class MusicWave : MonoBehaviour {
         {
             Offset = audio.time;
         }
+        // win
+        {
+            if (audio.time >= audio.clip.length) {
+                GameOver.It.Win();
+            }
+        }
     }
 
     public float GetHeight(float x) {

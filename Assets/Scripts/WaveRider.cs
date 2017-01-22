@@ -129,6 +129,12 @@ public class WaveRider : MonoBehaviour {
         {
             RotateObj.transform.rotation = Quaternion.Euler(RotateObj.transform.rotation.eulerAngles.withZ(Angle));
         }
+        // game over
+        {
+            if (Speed <= 0.25f) {
+                GameOver.It.Lose();
+            }
+        }
     }
 
     public void GetHurt() {

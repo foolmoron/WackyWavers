@@ -29,7 +29,7 @@ public class SpawnObstacles : MonoBehaviour {
                     // water
                     var thing = WaterPrefabs.Random();
                     obj = Instantiate(thing);
-                    obj.transform.position = new Vector3(15, Mathf.Lerp(0, 2, Random.value), -5);
+                    obj.transform.position = new Vector3(15, Mathf.Lerp(0, 1, Random.value), -5);
                 }
                 obj.AddComponent<DieAfterTime>().Seconds = 30;
                 obj.AddComponent<FlashRed>();

@@ -41,7 +41,7 @@ public class ScrollingBackground : MonoBehaviour {
         }
         // scroll
         {
-            var scrollAmount = BaseScrollSpeed * Mathf.Max(Rider.Speed, 0.5f) * Time.deltaTime;
+            var scrollAmount = BaseScrollSpeed * Mathf.Max(Rider.Speed, 1f) * Time.deltaTime;
             foreach (var item in Items) {
                 item.localPosition = item.localPosition.plusX(-scrollAmount);
             }
