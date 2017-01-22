@@ -134,4 +134,9 @@ public class WaveRider : MonoBehaviour {
     public void GetHurt() {
         SpeedTarget -= 2f;
     }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        GetHurt();
+        Destroy(other.gameObject);
+    }
 }
