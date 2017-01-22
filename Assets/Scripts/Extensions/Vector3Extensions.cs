@@ -42,4 +42,16 @@ public static class Vector3Extensions {
     public static Vector3 timesZ(this Vector3 vector, float timesZ) {
         return new Vector3(vector.x, vector.y, vector.z * timesZ);
     }
+
+    public static float max(this Vector4 vector) {
+        return Mathf.Max(Mathf.Max(vector.x, vector.y), Mathf.Max(vector.z, vector.w));
+    }
+
+    public static float average(this QueueList<float> list) {
+        var sum = 0f;
+        foreach (var item in list) {
+            sum += item;
+        }
+        return sum / list.Count;
+    }
 }

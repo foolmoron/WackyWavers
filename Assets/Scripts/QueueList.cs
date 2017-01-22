@@ -5,6 +5,11 @@ using UnityEngine;
 public class QueueList<T> : List<T> {
     public QueueList() : base() { }
     public QueueList(int capacity) : base(capacity) { }
+    public QueueList(int capacity, T initItem) : base(capacity) {
+        for (int i = 0; i < capacity; i++) {
+            Enqueue(initItem);
+        }
+    }
 
     public void Enqueue(T item) {
         Add(item);

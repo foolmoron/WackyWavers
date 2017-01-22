@@ -39,14 +39,6 @@ public class WaveRider : MonoBehaviour {
 
     bool init;
 
-    float Average(QueueList<float> list) {
-        var sum = 0f;
-        foreach (var item in list) {
-            sum += item;
-        }
-        return sum / list.Count;
-    }
-
     void Start() {
         while (angles.Count < ANGLE_SAMPLES) {
             angles.Enqueue(0);
@@ -77,7 +69,7 @@ public class WaveRider : MonoBehaviour {
             angles.Dequeue();
             angles.Enqueue(Mathf.Atan2(dY, dX) * Mathf.Rad2Deg);
         }
-        var smoothedWaveAngle = Average(angles);
+        var smoothedWaveAngle = angles.average();
         // correctness
         var currentCorrectness = 1 - (Mathf.Abs(Angle - smoothedWaveAngle) / 90);
         {
@@ -85,7 +77,7 @@ public class WaveRider : MonoBehaviour {
                 correctness.Dequeue();
                 correctness.Enqueue(currentCorrectness);
             }
-            var averageCorrectness = Average(correctness);
+            var averageCorrectness = correctness.average();
 
             var speeding = averageCorrectness > 0.7f;
             SpeedParticles.enableEmission(speeding && !Jumping);
