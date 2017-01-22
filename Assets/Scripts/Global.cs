@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Global : MonoBehaviour {
-
-    public static Global It;
-
+    
     public static int TheCurrentCharacter;
     public static int TheCurrentLevel;
 
@@ -14,17 +12,17 @@ public class Global : MonoBehaviour {
     public int CurrentLevel;
 
     void Awake() {
-        if (It == null) {
-            It = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-            DestroyImmediate(gameObject);
-        }
+        CurrentCharacter = TheCurrentCharacter;
+        CurrentLevel = TheCurrentLevel;
     }
 
     void FixedUpdate() {
         TheCurrentCharacter = CurrentCharacter;
         TheCurrentLevel = CurrentLevel;
+    }
+
+    public void DestroyObj(string name) {
+        Destroy(GameObject.Find(name));
     }
 
     public void LoadScene(string scene) {
@@ -34,21 +32,25 @@ public class Global : MonoBehaviour {
     public void NextCharacter() {
         var menuChars = FindObjectOfType<MenuChars>();
         CurrentCharacter = (CurrentCharacter + 1) % menuChars.Sprites.Length;
+        TheCurrentCharacter = CurrentCharacter;
     }
 
     public void PrevCharacter() {
         var menuChars = FindObjectOfType<MenuChars>();
         CurrentCharacter = (CurrentCharacter - 1 + menuChars.Sprites.Length) % menuChars.Sprites.Length;
+        TheCurrentCharacter = CurrentCharacter;
     }
 
     public void NextLevel() {
         var menuLevels = FindObjectOfType<MenuLevels>();
         CurrentLevel = (CurrentLevel + 1) % menuLevels.Levels.Length;
+        TheCurrentLevel = CurrentLevel;
     }
 
     public void PrevLevel() {
         var menuLevels = FindObjectOfType<MenuLevels>();
         CurrentLevel = (CurrentLevel - 1 + menuLevels.Levels.Length) % menuLevels.Levels.Length;
+        TheCurrentLevel = CurrentLevel;
     }
 
     public void LoadSelectedLevel() {
