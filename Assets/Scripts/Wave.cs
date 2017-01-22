@@ -7,6 +7,7 @@ using UnityEngine;
 public class Wave : MonoBehaviour {
 
     public MusicWave MusicWave;
+    public bool UseSimple;
     [Range(0, 30)]
     public float Length = 10;
 
@@ -33,7 +34,7 @@ public class Wave : MonoBehaviour {
         // update heights
         {
             for (int i = 0; i < heights.Length; i++) {
-                heights[i] = MusicWave.GetHeight(i * step);
+                heights[i] = UseSimple ? MusicWave.GetSimpleHeight(i * step) : MusicWave.GetHeight(i * step);
             }
         }
         // heights to verts
