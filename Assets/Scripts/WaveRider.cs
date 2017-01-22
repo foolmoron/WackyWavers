@@ -33,6 +33,9 @@ public class WaveRider : MonoBehaviour {
     public float JumpVelocity;
     public float JumpGravity = 10;
     public AnimationCurve SpeedToJump;
+    [Range(0, 10)]
+    public float AccelerationBonus = 3;
+    float currentBonus = 1;
 
     float Average(QueueList<float> list) {
         var sum = 0f;
@@ -69,16 +72,24 @@ public class WaveRider : MonoBehaviour {
             angles.Enqueue(Mathf.Atan2(dY, dX) * Mathf.Rad2Deg);
         }
         var smoothedWaveAngle = Average(angles);
-        // correctness
+        // bonus
         {
-            correctness.Dequeue();
-            correctness.Enqueue(1 - (Mathf.Abs(Angle - smoothedWaveAngle) / 90));
+            currentBonus = Mathf.Lerp(currentBonus, 1, 0.05f);
+            Debug.Log(currentBonus);
+        }
+        // correctness
+        var currentCorrectness = 1 - (Mathf.Abs(Angle - smoothedWaveAngle) / 90);
+        {
+            if (!Jumping) {
+                correctness.Dequeue();
+                correctness.Enqueue(currentCorrectness);
+            }
             var averageCorrectness = Average(correctness);
 
             var speeding = averageCorrectness > 0.7f;
             SpeedParticles.enableEmission(speeding && !Jumping);
             if (!Jumping) {
-                Speed += Time.deltaTime * (speeding ? Acceleration : -Deceleration);
+                Speed += Time.deltaTime * (speeding ? Acceleration * currentBonus : -Deceleration);
                 Speed = Mathf.Clamp(Speed, 0, 10);
             }
         }
@@ -99,9 +110,10 @@ public class WaveRider : MonoBehaviour {
         }
         // landing
         {
-            if (JumpY <= currentY) {
+            if (Jumping && JumpY <= currentY) {
                 Jumping = false;
-                //TODO: modify speed by landing
+                // modify speed by landing
+                currentBonus = AccelerationBonus * currentCorrectness;
             }
         }
         // position
