@@ -123,7 +123,7 @@ public class WaveRider : MonoBehaviour {
         }
         // speed
         {
-            Speed = Mathf.Lerp(Speed, SpeedTarget, 0.1f);
+            Speed = Mathf.Lerp(Speed, SpeedTarget, .1f);
         }
         // position
         {
