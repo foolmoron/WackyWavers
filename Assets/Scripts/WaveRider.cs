@@ -36,6 +36,7 @@ public class WaveRider : MonoBehaviour {
     [Range(0, 10)]
     public float AccelerationBonus = 3;
     float currentBonus = 1;
+    bool init;
 
     float Average(QueueList<float> list) {
         var sum = 0f;
@@ -55,6 +56,10 @@ public class WaveRider : MonoBehaviour {
     }
 
     void FixedUpdate() {
+        if (!init) {
+            init = true;
+            return;
+        }
         // do angle
         {
             if (Input.GetKey(KeyCode.LeftArrow)) {
