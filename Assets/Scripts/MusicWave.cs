@@ -53,6 +53,7 @@ public class MusicWave : MonoBehaviour {
 
     public float GetSimpleHeight(float x) {
         x += Offset;
-        return BaseHeight + (x > 6.2f ? Mathf.Sin(audioReactive.BeatOutputAccum.x / 300 * x) * 0.5f : 0);
+        var lerp = Mathf.Clamp01((x - 5f) / 2f);
+        return BaseHeight + Mathf.Lerp(0, Mathf.Sin(audioReactive.BeatOutputAccum.x / 300 * x) * 0.5f, lerp);
     }
 }

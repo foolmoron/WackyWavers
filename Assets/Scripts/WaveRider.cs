@@ -84,7 +84,7 @@ public class WaveRider : MonoBehaviour {
         }
         // do jump
         {
-            if (Input.GetKeyDown(KeyCode.UpArrow) && !Jumping) {
+            if (Input.GetKey(KeyCode.UpArrow) && !Jumping) {
                 Jumping = true;
                 JumpY = currentY + 0.01f;
                 JumpVelocity = SpeedToJump.Evaluate(Speed);
@@ -101,6 +101,7 @@ public class WaveRider : MonoBehaviour {
         {
             if (JumpY <= currentY) {
                 Jumping = false;
+                //TODO: modify speed by landing
             }
         }
         // position
