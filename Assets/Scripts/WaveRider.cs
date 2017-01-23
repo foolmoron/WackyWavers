@@ -37,6 +37,12 @@ public class WaveRider : MonoBehaviour {
     [Range(0, 10)]
     public float AccelerationBonus = 2;
 
+    public GameObject[] GoodObjs;
+    public GameObject[] HurtObjs;
+
+    public AudioClip JumpSound;
+    public AudioClip HurtSound;
+
     bool init;
 
     void Start() {
@@ -47,10 +53,13 @@ public class WaveRider : MonoBehaviour {
             correctness.Enqueue(0);
         }
     }
+    
+    void Update() {
+        init = true;
+    }
 
     void FixedUpdate() {
         if (!init) {
-            init = true;
             return;
         }
         // do angle
@@ -92,6 +101,7 @@ public class WaveRider : MonoBehaviour {
                 Jumping = true;
                 JumpY = currentY + 0.01f;
                 JumpVelocity = SpeedToJump.Evaluate(SpeedTarget);
+                JumpSound.Play();
             }
         }
         // velocity/ gravity
@@ -108,6 +118,7 @@ public class WaveRider : MonoBehaviour {
                 // modify speed by landing
                 if (currentCorrectness > 0.7f) {
                     SpeedTarget += currentCorrectness * AccelerationBonus;
+                    Instantiate(GoodObjs.Random(), transform.position.withZ(-7), Quaternion.identity);
                 } else {
                     GetHurt();
                 }
@@ -139,6 +150,8 @@ public class WaveRider : MonoBehaviour {
 
     public void GetHurt() {
         SpeedTarget -= 2f;
+        Instantiate(HurtObjs.Random(), transform.position.withZ(-7), Quaternion.identity);
+        HurtSound.Play();
     }
 
     void OnTriggerEnter2D(Collider2D other) {
