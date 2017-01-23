@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour {
 
@@ -25,5 +26,13 @@ public class GameOver : MonoBehaviour {
         FindObjectOfType<WaveRider>().gameObject.SetActive(false);
         FindObjectsOfType<AudioSource>().ForEach(a => a.Stop());
         WinObjs.ForEach(o => o.SetActive(true));
+    }
+
+    public void LoadSameScene() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void LoadScene(string scene) {
+        SceneManager.LoadScene(scene);
     }
 }
