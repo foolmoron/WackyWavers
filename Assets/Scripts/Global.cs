@@ -14,6 +14,7 @@ public class Global : MonoBehaviour {
     void Awake() {
         CurrentCharacter = TheCurrentCharacter;
         CurrentLevel = TheCurrentLevel;
+        Screen.SetResolution(900, 600, false);
     }
 
     void FixedUpdate() {
